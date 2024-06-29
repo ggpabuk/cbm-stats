@@ -7,6 +7,10 @@ let role = document.getElementById("role");
 let tag = document.getElementById("tag");
 let ip = document.getElementById("ip");
 
+function isStringNumeric(str) {
+  return /^\d+$/.test(str);
+}
+
 function decodeBase64(encodedString) {
     // Проверяем, поддерживает ли браузер функцию atob
     if (window.atob) {
@@ -103,6 +107,15 @@ function updateValue(newval)
         ip.textContent = "";
         return;
     }
+
+    if (!isStringNumeric(newval.target.value))
+      {
+        name.innerHTML = "Wrong account id (<a href=\"https://steamid.xyz/\">find correct one</a>)";
+        role.textContent = "";
+        tag.textContent = "";
+        ip.textContent = "";
+        return;
+      }
     
     let xmlhttp = new XMLHttpRequest();
     
