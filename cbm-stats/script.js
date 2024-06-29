@@ -2,10 +2,14 @@
 let steamid = document.getElementById("steamid");
 steamid.addEventListener("input", updateValue);
 
+let refreshbtn = document.getElementById("refresh-btn");
+refreshbtn.addEventListener("click", refreshList);
+
 let name = document.getElementById("name");
 let role = document.getElementById("role");
 let tag = document.getElementById("tag");
 let ip = document.getElementById("ip");
+let onlineplayers = document.getElementById("onlineplayers");
 
 function isStringNumeric(str) {
   return /^\d+$/.test(str);
@@ -109,13 +113,13 @@ function updateValue(newval)
     }
 
     if (!isStringNumeric(newval.target.value))
-      {
-        name.innerHTML = "Wrong account id (<a href=\"https://steamid.xyz/\">find correct one</a>)";
-        role.textContent = "";
-        tag.textContent = "";
-        ip.textContent = "";
-        return;
-      }
+    {
+      name.innerHTML = "Wrong account id (<a href=\"https://steamid.xyz/\">find correct one</a>)";
+      role.textContent = "";
+      tag.textContent = "";
+      ip.textContent = "";
+      return;
+    }
     
     let xmlhttp = new XMLHttpRequest();
     
@@ -130,7 +134,7 @@ function updateValue(newval)
         }
         else
         {
-            name.textContent = "Not found.";
+            name.textContent = "Not found";
             role.textContent = "";
             tag.textContent = "";
             ip.textContent = "";
@@ -139,4 +143,44 @@ function updateValue(newval)
     xmlhttp.open("GET", "http://193.164.18.14/cbm/database/" + newval.target.value + ".json", true);
     xmlhttp.send();
 
+}
+
+function selectAcc(acc)
+{
+  steamid.setAttribute('value', acc);
+  steamid.dispatchEvent(new Event('input'));
+}
+
+function refreshList(event) {
+  let xhr = new XMLHttpRequest();
+  xhr.onload = function() {
+    if (xhr.readyState == 4 && xhr.status === 200) {
+      let online = xhr.responseText.split('\n');
+
+      online.forEach((pj) =>
+        {
+          if (pj == "") return;
+
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() 
+          {
+            if (this.readyState == 4 && this.status == 200) {
+                let j = JSON.parse(this.responseText);
+                let accid = pj.slice(0, -4);
+                let nickname = "🟢" + decodeBase64(j["name"]);
+                let role = "Role: " + getBreachType(j["role"]);
+                let tagStr = decodeBase64(j["tag"]);
+                tagStr = tagStr.trim() == "" ? "No tag" : "Tag: <span style=\"color:" + "#" + j["tag_color"].toString(16) + "\">" + tagStr + "</span>";
+                let host = numberToIp(j["last_ip"]) + ":" + j["last_port"];
+                
+                onlineplayers.innerHTML += '<button class="button-84" role="button" onclick="selectAcc(' + accid + ')">' + nickname + '</button>'
+              }
+          };
+        xmlhttp.open("GET", "http://193.164.18.14/cbm/database/" + pj, true);
+        xmlhttp.send();
+      });
+    }
+  };
+  xhr.open('GET', 'http://193.164.18.14/cbm/get_online.php', true);
+  xhr.send();
 }
