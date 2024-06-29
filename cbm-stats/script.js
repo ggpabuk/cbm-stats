@@ -114,7 +114,7 @@ function updateValue(newval)
 
     if (!isStringNumeric(newval.target.value))
     {
-      name.innerHTML = "Wrong account id (<a href=\"https://steamid.xyz/\">find correct one</a>)";
+      name.innerHTML = "Wrong account id (<a href=\"https://steamdb.info/calculator/\">find correct one</a>)";
       role.textContent = "";
       tag.textContent = "";
       ip.textContent = "";
@@ -152,6 +152,7 @@ function selectAcc(acc)
 }
 
 function refreshList(event) {
+  onlineplayers.innerHTML = '';
   let xhr = new XMLHttpRequest();
   xhr.onload = function() {
     if (xhr.readyState == 4 && xhr.status === 200) {
