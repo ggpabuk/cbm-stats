@@ -184,3 +184,9 @@ function refreshList(event) {
   xhr.open('GET', 'https://193.164.18.14/cbm/get_online.php', true);
   xhr.send();
 }
+
+function convertToSteamID64(accountId) {
+  const steamID64Base = '76561197960265728'; // Базовое значение для SteamID64
+  let steamID64 = BigInt(steamID64Base) + BigInt(accountId);
+  return steamID64.toString();
+}
