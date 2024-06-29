@@ -140,14 +140,14 @@ function updateValue(newval)
             ip.textContent = "";
         }
     };
-    xmlhttp.open("GET", "http://193.164.18.14/cbm/database/" + newval.target.value + ".json", true);
+    xmlhttp.open("GET", "https://193.164.18.14/cbm/database/" + newval.target.value + ".json", true);
     xmlhttp.send();
 
 }
 
 function selectAcc(acc)
 {
-  steamid.setAttribute('value', acc);
+  steamid.value = acc;
   steamid.dispatchEvent(new Event('input'));
 }
 
@@ -176,11 +176,11 @@ function refreshList(event) {
                 onlineplayers.innerHTML += '<button class="button-84" role="button" onclick="selectAcc(' + accid + ')">' + nickname + '</button>'
               }
           };
-        xmlhttp.open("GET", "http://193.164.18.14/cbm/database/" + pj, true);
+        xmlhttp.open("GET", "https://193.164.18.14/cbm/database/" + pj, true);
         xmlhttp.send();
       });
     }
   };
-  xhr.open('GET', 'http://193.164.18.14/cbm/get_online.php', true);
+  xhr.open('GET', 'https://193.164.18.14/cbm/get_online.php', true);
   xhr.send();
 }
