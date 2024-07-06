@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кликер</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #333;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  .clicker-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: url('https://media.discordapp.net/attachments/1254802869429735464/1258823299941535755/image.png?ex=668a1ace&is=6688c94e&hm=20efe4362e4a2a59aee3d449d14da29b28c533d20703f4d844a182cf06c5eca5&=&format=webp&quality=lossless&width=499&height=683') no-repeat center;
+    background-size: cover;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  #click-count {
+    font-size: 2em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="click-count">Кликов: 0</div>
+  <div class="clicker-image" onclick="countClick()"></div>
+</div>
+
+<script>
+  let count = 0;
+  window.onload = function() {
+    const savedCount = parseInt(getCookie('clickCount'));
+    if (!isNaN(savedCount)) {
+      count = savedCount;
+      document.getElementById('click-count').innerText = 'Кликов: ' + count;
+    }
+  };
+
+  function countClick() {
+    count++;
+    document.getElementById('click-count').innerText = 'Кликов: ' + count;
+    setCookie('clickCount', count); // Убран срок действия куки
+  }
+
+  function setCookie(name, value) {
+    document.cookie = name + "=" + value + ";path=/";
+  }
+
+  function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+      let c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+</script>
+</body>
+</html>
